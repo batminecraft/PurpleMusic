@@ -1,43 +1,45 @@
-name: CustomDiscs
+name: PurpleMusic
 version: '${plugin_version}'
-main: me.Navoei.customdiscsplugin.CustomDiscs
+main: fr.batmultifonction.purplemusic.PurpleMusic
 api-version: '${bukkit_api_version}'
-prefix: CustomDiscs
-authors: [ "Navoei" ]
-contributors: ["Athar42", "alfw" ]
-website: https://github.com/Navoei/CustomDiscs
-description: A plugin which uses the Simple Voice Chat API to add custom music discs, goat horns and player heads. (Paper-only)
+prefix: PurpleMusic
+authors: [ "BatMultifonction" ]
+description: A Simple Voice Chat powered music plugin. Play tracks to players, build queues, and create music zones.
 
 permissions:
-  customdiscs.*:
-    description: Grants all CustomDiscs permissions
+  purplemusic.*:
+    description: Grants all PurpleMusic permissions
     default: op
     children:
-      customdiscs.create: true
-      customdiscs.download: true
-      customdiscs.revert: true
-      customdiscs.range: true
-      customdiscs.horncooldown: true
-      customdiscs.reload: true
-      customdiscs.update: true
-  customdiscs.create:
-    description: Allows creating custom discs, horns and heads
+      purplemusic.download: true
+      purplemusic.play: true
+      purplemusic.stop: true
+      purplemusic.queue: true
+      purplemusic.playlist: true
+      purplemusic.zone: true
+      purplemusic.reload: true
+      purplemusic.list: true
+  purplemusic.download:
+    description: Allows downloading audio files
     default: op
-  customdiscs.download:
-    description: Allows downloading audio files from a URL
+  purplemusic.play:
+    description: Allows playing audio to players
     default: op
-  customdiscs.revert:
-    description: Allows reverting custom items to their original state
+  purplemusic.stop:
+    description: Allows stopping playback
     default: op
-  customdiscs.range:
-    description: Allows setting the audio range of custom items
+  purplemusic.queue:
+    description: Allows managing player queues
     default: op
-  customdiscs.horncooldown:
-    description: Allows setting the cooldown of custom goat horns
+  purplemusic.playlist:
+    description: Allows managing playlists
     default: op
-  customdiscs.reload:
-    description: Allows reloading the plugin configuration
+  purplemusic.zone:
+    description: Allows managing music zones
     default: op
-  customdiscs.update:
-    description: Receives update notifications on join
+  purplemusic.reload:
+    description: Allows reloading the plugin
+    default: op
+  purplemusic.list:
+    description: Allows listing tracks/playlists/zones
     default: op

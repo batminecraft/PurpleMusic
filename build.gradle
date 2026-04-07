@@ -41,8 +41,6 @@ dependencies {
     implementation "io.papermc.paper:paper-api:${bukkit_version}"
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
     shadow "dev.jorel:commandapi-paper-shade:${command_api_version}"
-
-    compileOnly "com.github.retrooper:packetevents-spigot:2.11.2"
 }
 
 repositories {
@@ -69,5 +67,5 @@ shadowJar {
     //relocate 'org.tritonus', "me.navoei.${mod_id}.tritonus"
 
     // By documentation, it was recommented to relocate to not cause issues with other plugins that shade CommandAPI
-    relocate("dev.jorel.commandapi", "me.navoei.${mod_id}.commandapi")
+    relocate("dev.jorel.commandapi", "dev.purplemusic.${mod_id}.commandapi")
 }
