@@ -1,3 +1,4 @@
+[![](https://jitpack.io/v/batminecraft/PurpleMusic.svg)](https://jitpack.io/#batminecraft/PurpleMusic)
 # PurpleMusic
 
 A Paper/Folia plugin built on the [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) API

@@ -45,6 +45,11 @@ public class AudioEngine {
 
     /** Plays a track to a single player as a static (always-audible) channel attached to that player. */
     public Handle playToPlayer(Player player, Path file) {
+        return playToPlayer(player, file, 1.0f);
+    }
+
+    /** Same as {@link #playToPlayer(Player, Path)} with an explicit volume multiplier. */
+    public Handle playToPlayer(Player player, Path file, float volumeMultiplier) {
         VoicechatServerApi api = VoicePlugin.voicechatServerApi;
         if (api == null) return Handle.failed();
         ServerPlayer sp = api.fromServerPlayer(player);
@@ -54,14 +59,19 @@ public class AudioEngine {
         StaticAudioChannel channel = api.createStaticAudioChannel(id, api.fromServerLevel(player.getWorld()), conn);
         if (channel == null) return Handle.failed();
         channel.setCategory(VoicePlugin.CATEGORY_ID);
-        return startStream(api, channel, file);
+        return startStream(api, channel, file, volumeMultiplier);
     }
 
     /** Plays a track to many players (one channel per player). */
     public Handle playToPlayers(Collection<Player> players, Path file) {
+        return playToPlayers(players, file, 1.0f);
+    }
+
+    /** Same as {@link #playToPlayers(Collection, Path)} with an explicit volume multiplier. */
+    public Handle playToPlayers(Collection<Player> players, Path file, float volumeMultiplier) {
         Handle group = new Handle();
         for (Player p : players) {
-            Handle h = playToPlayer(p, file);
+            Handle h = playToPlayer(p, file, volumeMultiplier);
             group.attachChild(h);
         }
         return group;
@@ -69,6 +79,15 @@ public class AudioEngine {
 
     /** Plays a track at a fixed location (locational channel) heard by everyone in range. */
     public Handle playLocational(Location location, float range, Path file) {
+        return playLocational(location, range, file, 1.0f);
+    }
+
+    /**
+     * Same as {@link #playLocational(Location, float, Path)} but applies an extra
+     * volume multiplier (0.0..1.0) on top of the global {@code music-volume}. Used
+     * by music zones to let each zone override its volume independently.
+     */
+    public Handle playLocational(Location location, float range, Path file, float volumeMultiplier) {
         VoicechatServerApi api = VoicePlugin.voicechatServerApi;
         if (api == null) return Handle.failed();
         ServerLevel level = api.fromServerLevel(location.getWorld());
@@ -78,10 +97,10 @@ public class AudioEngine {
         if (channel == null) return Handle.failed();
         channel.setCategory(VoicePlugin.CATEGORY_ID);
         channel.setDistance(range);
-        return startStream(api, channel, file);
+        return startStream(api, channel, file, volumeMultiplier);
     }
 
-    private Handle startStream(VoicechatServerApi api, AudioChannel channel, Path file) {
+    private Handle startStream(VoicechatServerApi api, AudioChannel channel, Path file, float volumeMultiplier) {
         Handle handle = new Handle();
         io.execute(() -> {
             AudioInputStream stream;
@@ -94,7 +113,7 @@ public class AudioEngine {
             }
             AudioPlayer player = api.createAudioPlayer(channel, api.createEncoder(), () -> {
                 try {
-                    return readFrame(stream);
+                    return readFrame(stream, volumeMultiplier);
                 } catch (Exception e) {
                     if (plugin.isDebugMode()) plugin.getLogger().log(Level.SEVERE, "Decode error", e);
                     return null;
@@ -110,7 +129,7 @@ public class AudioEngine {
         return handle;
     }
 
-    private short[] readFrame(AudioInputStream stream) throws IOException {
+    private short[] readFrame(AudioInputStream stream, float extraMultiplier) throws IOException {
         final int FRAME_BYTES = 1920; // 20 ms @ 48 kHz mono 16-bit
         byte[] buf = new byte[FRAME_BYTES];
         int total = 0;
@@ -121,8 +140,10 @@ public class AudioEngine {
         }
         if (total <= 0) return null;
         for (int i = total; i < FRAME_BYTES; i++) buf[i] = 0;
-        // volume scale
-        float vol = plugin.musicVolume();
+        // volume scale (global music-volume * per-playback multiplier)
+        float vol = plugin.musicVolume() * extraMultiplier;
+        if (vol < 0f) vol = 0f;
+        if (vol > 1f) vol = 1f;
         if (vol < 1f) {
             for (int i = 0; i < FRAME_BYTES; i += 2) {
                 short s = (short) ((buf[i] & 0xff) | (buf[i + 1] << 8));

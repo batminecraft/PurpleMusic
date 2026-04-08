@@ -64,7 +64,8 @@ public class ZoneManager {
                         sec.getString("source"),
                         Playlist.Mode.parse(sec.getString("playlist-mode", "SEQUENTIAL")),
                         MusicZone.Schedule.valueOf(sec.getString("schedule", "CONTINUOUS")),
-                        sec.getLong("interval-seconds", 0));
+                        sec.getLong("interval-seconds", 0),
+                        (float) sec.getDouble("volume", 1.0d));
                 zones.put(name.toLowerCase(), z);
             } catch (Exception e) {
                 plugin.getLogger().warning("Failed to load zone '" + name + "': " + e.getMessage());
@@ -86,6 +87,7 @@ public class ZoneManager {
             cfg.set(base + ".playlist-mode", z.playlistMode().name());
             cfg.set(base + ".schedule", z.schedule().name());
             cfg.set(base + ".interval-seconds", z.intervalSeconds());
+            cfg.set(base + ".volume", z.volume());
         }
         try {
             cfg.save(file);
@@ -183,7 +185,8 @@ public class ZoneManager {
     }
 
     private void playOnce(MusicZone z, World world, Path file, boolean isPlaylist) {
-        AudioEngine.Handle h = engine.playLocational(z.locationIn(world), z.radius(), file);
+        AudioEngine.Handle h = engine.playLocational(
+                z.locationIn(world), z.radius(), file, z.volume());
         z.setCurrentHandle(h);
         h.onComplete(() -> {
             z.setCurrentHandle(null);

@@ -1,6 +1,7 @@
 package fr.batmultifonction.purplemusic.playback;
 
 import fr.batmultifonction.purplemusic.PurpleMusic;
+import fr.batmultifonction.purplemusic.api.SfxEvent;
 import fr.batmultifonction.purplemusic.audio.AudioEngine;
 import fr.batmultifonction.purplemusic.library.Playlist;
 import org.bukkit.Bukkit;
@@ -51,6 +52,7 @@ public class PlaybackService {
         stopSession(s);
         s.setCurrentTrack(trackName);
         s.clearPlaylist();
+        plugin.sfx().play(SfxEvent.PLAY, player);
         AudioEngine.Handle h = engine.playToPlayer(player, file);
         s.setCurrentHandle(h);
         h.onComplete(() -> onTrackEnded(s));
@@ -65,6 +67,7 @@ public class PlaybackService {
         s.setCurrentTrack(trackName);
         s.clearPlaylist();
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        plugin.sfx().broadcast(SfxEvent.PLAY);
         AudioEngine.Handle h = engine.playToPlayers(new ArrayList<>(players), file);
         s.setCurrentHandle(h);
         h.onComplete(() -> onTrackEnded(s));
@@ -191,12 +194,18 @@ public class PlaybackService {
     /** Stops the current track and triggers the next from the queue/playlist. */
     public void skip(Player player) {
         PlaybackSession s = sessions.get(player.getUniqueId());
-        if (s != null && s.currentHandle() != null) s.currentHandle().stop();
+        if (s != null && s.currentHandle() != null) {
+            plugin.sfx().play(SfxEvent.SKIP, player);
+            s.currentHandle().stop();
+        }
     }
 
     public void skipGlobal() {
         PlaybackSession s = sessions.get(ALL);
-        if (s != null && s.currentHandle() != null) s.currentHandle().stop();
+        if (s != null && s.currentHandle() != null) {
+            plugin.sfx().broadcast(SfxEvent.SKIP);
+            s.currentHandle().stop();
+        }
     }
 
     // -------- stop --------
@@ -206,16 +215,20 @@ public class PlaybackService {
         if (s != null) {
             s.queue().clear();
             s.clearPlaylist();
+            if (s.currentHandle() != null) plugin.sfx().play(SfxEvent.STOP, player);
             stopSession(s);
         }
     }
 
     public void stopAll() {
+        boolean any = false;
         for (PlaybackSession s : sessions.values()) {
+            if (s.currentHandle() != null) any = true;
             s.queue().clear();
             s.clearPlaylist();
             stopSession(s);
         }
+        if (any) plugin.sfx().broadcast(SfxEvent.STOP);
     }
 
     public void stopGlobal() {
