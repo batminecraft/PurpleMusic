@@ -1,7 +1,11 @@
+
 plugins {
     id 'java'
+    id 'maven-publish'
     id "com.gradleup.shadow" version "9.3.2"
 }
+
+
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -24,8 +28,19 @@ processResources {
     }
 }
 
-dependencies {
+repositories {
+    mavenCentral()
+    maven { name = "henkelmax.public"; url = 'https://maven.maxhenkel.de/repository/public' }
+    maven { name = "papermc"; url = uri("https://repo.papermc.io/repository/maven-public/") }
+    maven { url = "https://repo.codemc.org/repository/maven-public/" }
+    mavenLocal()
+}
 
+configurations {
+    proguard
+}
+
+dependencies {
     implementation("com.googlecode.soundlibs:mp3spi:${mp3spi_version}") {
         exclude group: 'junit', module: 'junit'
     }
@@ -34,38 +49,81 @@ dependencies {
     }
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-
     implementation 'org.jflac:jflac-codec:1.5.2'
     shadow 'org.jflac:jflac-codec:1.5.2'
 
     implementation "io.papermc.paper:paper-api:${bukkit_version}"
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
     shadow "dev.jorel:commandapi-paper-shade:${command_api_version}"
-}
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "henkelmax.public"
-        url = 'https://maven.maxhenkel.de/repository/public'
-    }
-    // You need this maven repository if you want to use the paper dependency
-    maven {
-        name = "papermc"
-        url = uri("https://repo.papermc.io/repository/maven-public/")
-    }
-    maven { url = "https://repo.codemc.org/repository/maven-public/" }
-
-    mavenLocal()
+    proguard files('libs/proguard.jar')
 }
 
 shadowJar {
     configurations = [project.configurations.shadow]
     archiveClassifier.set("")
 
-    //relocate 'javazoom', "me.navoei.${mod_id}.javazoom"
-    //relocate 'org.tritonus', "me.navoei.${mod_id}.tritonus"
+    relocate("dev.jorel.commandapi", "fr.batmultifonction.${mod_id}.commandapi")
+}
 
-    // By documentation, it was recommented to relocate to not cause issues with other plugins that shade CommandAPI
-    relocate("dev.jorel.commandapi", "dev.purplemusic.${mod_id}.commandapi")
+// Slim jar containing only the public API package, intended to be added as a
+// compileOnly dependency by other plugins that want to integrate with PurpleMusic.
+task apiJar(type: Jar) {
+    archiveBaseName.set("${archives_base_name}-api")
+    archiveClassifier.set("")
+    from(sourceSets.main.output) {
+        include "fr/batmultifonction/${mod_id}/api/**"
+    }
+}
+
+task apiSourcesJar(type: Jar) {
+    archiveBaseName.set("${archives_base_name}-api")
+    archiveClassifier.set("sources")
+    from(sourceSets.main.allJava) {
+        include "fr/batmultifonction/${mod_id}/api/**"
+    }
+}
+
+// Maven publication consumed by JitPack.
+// Third-party plugins depend on it as:
+//   implementation 'com.github.<owner>.PurpleMusic:purplemusic-api:<tag>'
+publishing {
+    publications {
+        api(MavenPublication) {
+            groupId = maven_group
+            artifactId = 'purplemusic-api'
+            version = plugin_version
+            artifact apiJar
+            artifact apiSourcesJar
+            pom {
+                name = 'PurpleMusic API'
+                description = 'Public API for the PurpleMusic Paper/Folia plugin.'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Tâche ProGuard pour obfuscation
+task obfuscateJar(type: JavaExec) {
+    dependsOn shadowJar
+    mainClass.set("proguard.ProGuard")
+    classpath = configurations.proguard
+
+    def javaHome = System.getenv("JAVA_HOME") ?: System.getProperty("java.home")
+    def jmodsDir = file("${javaHome}/jmods")
+
+    // Crée une string séparée par ";" avec tous les fichiers jmod
+    def jmodsFiles = jmodsDir.listFiles()?.collect { it.absolutePath }?.join(';') ?: ''
+
+    args = [
+            "@proguard.pro",
+            "-injars", shadowJar.archiveFile.get().asFile.absolutePath,
+            "-outjars", "${buildDir}/libs/${archives_base_name}-${version}-O.jar",
+            "-libraryjars", "${jmodsFiles};${configurations.compileClasspath.asPath}"
+    ]
 }

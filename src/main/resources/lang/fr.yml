@@ -1,0 +1,82 @@
+# PurpleMusic - Fichier de langue francais
+#
+# Couleurs supportees (via les codes &) :
+#   &0-&f couleurs, &k-&r formats, %prefix% pour le prefixe configure.
+#
+# Toute valeur {placeholder} est remplacee a l'execution par la valeur correspondante.
+
+# Prefixe prepose a chaque message utilisateur.
+prefix: "&8[&x&A&6&8&4&F&F&lᴘ&x&B&5&9&9&F&F&l.&x&C&4&A&D&F&F&lᴍ&x&D&3&C&2&F&F&lᴜ&x&E&1&D&6&F&F&lꜱ&x&F&0&E&B&F&F&lɪ&x&F&F&F&F&F&F&lᴄ&8] &f&l» &r"
+
+# --- generique ---
+reload-done: "%prefix%&aConfiguration rechargee."
+help-header: "&dCommandes PurpleMusic :"
+help-line: "&7  {command}"
+only-players: "%prefix%&cSeuls les joueurs peuvent utiliser cette commande."
+no-permission: "%prefix%&cTu n'as pas la permission d'utiliser cela."
+player-not-online: "%prefix%&cJoueur hors ligne : &f{player}"
+
+# --- bibliotheque ---
+track-not-found: "%prefix%&cMusique introuvable : &f{track}"
+library-empty: "%prefix%&7Aucune musique trouvee dans musicdata/."
+library-count: "%prefix%&a{count} musique(s) trouvee(s) :"
+library-entry: "&7  - &f{track}"
+
+# --- lecture ---
+playing-to-player: "%prefix%&aLecture de &f{track}&a pour &f{player}&a."
+playing-to-all: "%prefix%&aLecture de &f{track}&a pour tout le monde."
+stopped-player: "%prefix%&aLecture arretee pour &f{player}&a."
+stopped-all: "%prefix%&aToute la lecture a ete arretee."
+
+# --- files d'attente ---
+queue-added-player: "%prefix%&a&f{track}&a ajoute a la file de &f{player}&a."
+queue-added-all: "%prefix%&a&f{track}&a ajoute a la file globale."
+queue-cleared-player: "%prefix%&aFile de &f{player}&a videe."
+queue-cleared-all: "%prefix%&aFile globale videe."
+queue-empty: "%prefix%&7La file ({target}) est vide."
+queue-header: "%prefix%&aFile ({target}) :"
+queue-entry: "&7  {index}. &f{track}"
+queue-skipped-player: "%prefix%&aPiste actuelle passee pour &f{player}&a."
+queue-skipped-all: "%prefix%&aPiste globale actuelle passee."
+
+# --- playlists ---
+playlist-exists: "%prefix%&cUne playlist avec ce nom existe deja."
+playlist-not-found: "%prefix%&cPlaylist introuvable : &f{name}"
+playlist-empty: "%prefix%&cCette playlist est vide."
+playlist-created: "%prefix%&aPlaylist &f{name}&a creee."
+playlist-deleted: "%prefix%&aPlaylist &f{name}&a supprimee."
+playlist-added: "%prefix%&a&f{track}&a ajoutee a la playlist &f{name}&a."
+playlist-removed: "%prefix%&a&f{track}&a retiree de la playlist &f{name}&a."
+playlist-track-missing: "%prefix%&cCette piste n'est pas dans la playlist."
+playlist-mode-set: "%prefix%&aMode de la playlist &f{name}&a defini sur &f{mode}&a."
+playlist-list-empty: "%prefix%&7Aucune playlist."
+playlist-list-header: "%prefix%&a{count} playlist(s) :"
+playlist-list-entry: "&7  - &f{name} &8[{mode}, {size} pistes]"
+playlist-show-header: "%prefix%&aPlaylist &f{name} &8[{mode}]&a :"
+playlist-show-entry: "&7  {index}. &f{track}"
+playlist-playing-player: "%prefix%&aLecture de la playlist &f{name}&a pour &f{player}&a."
+playlist-playing-all: "%prefix%&aLecture de la playlist &f{name}&a pour tout le monde."
+
+# --- zones ---
+zone-exists: "%prefix%&cUne zone avec ce nom existe deja."
+zone-not-found: "%prefix%&cZone introuvable : &f{name}"
+zone-need-interval: "%prefix%&cTu dois fournir interval-seconds pour le mode interval."
+zone-created: "%prefix%&aZone &f{name}&a creee ({schedule})."
+zone-deleted: "%prefix%&aZone &f{name}&a supprimee."
+zone-list-empty: "%prefix%&7Aucune zone."
+zone-list-header: "%prefix%&a{count} zone(s) :"
+zone-list-entry: "&7  - &f{name} &8@ {world} ({x}, {y}, {z})&7 r=&f{radius}&7 vol=&f{volume}&7 {type}:&f{source} &8[{schedule}]"
+zone-mode-only-playlist: "%prefix%&cLe mode de lecture ne s'applique qu'aux zones de type playlist."
+zone-mode-set: "%prefix%&aMode de la zone &f{name}&a defini sur &f{mode}&a."
+zone-volume-set: "%prefix%&aVolume de la zone &f{name}&a defini sur &f{volume}&a."
+zone-volume-invalid: "%prefix%&cLe volume doit etre compris entre 0.0 et 1.0."
+
+# --- telechargements ---
+downloading: "%prefix%&7Telechargement en cours..."
+download-saved: "%prefix%&aEnregistre sous &f{file}&a."
+download-failed: "%prefix%&c{error}"
+download-usage: "%prefix%&cUsage : /pm download <url> <fichier>"
+
+# --- langue ---
+language-loaded: "%prefix%&aLangue chargee : &f{language}"
+language-missing: "%prefix%&cFichier de langue &f{language}&c introuvable, retour a &fen&c."

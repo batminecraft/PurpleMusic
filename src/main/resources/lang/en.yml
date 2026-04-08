@@ -1,0 +1,82 @@
+# PurpleMusic - English language file
+#
+# Supported colors (MiniMessage-style, using & codes):
+#   &0-&f colors, &k-&r formats, %prefix% for the configured prefix.
+#
+# Any {placeholder} is replaced at runtime with the corresponding value.
+
+# Prefix prepended to every user-facing message.
+prefix: "&8[&x&A&6&8&4&F&F&lᴘ&x&B&5&9&9&F&F&l.&x&C&4&A&D&F&F&lᴍ&x&D&3&C&2&F&F&lᴜ&x&E&1&D&6&F&F&lꜱ&x&F&0&E&B&F&F&lɪ&x&F&F&F&F&F&F&lᴄ&8] &f&l» &r"
+
+# --- generic ---
+reload-done: "%prefix%&aConfiguration reloaded."
+help-header: "&dPurpleMusic commands:"
+help-line: "&7  {command}"
+only-players: "%prefix%&cOnly players can use this command."
+no-permission: "%prefix%&cYou don't have permission to use that."
+player-not-online: "%prefix%&cPlayer not online: &f{player}"
+
+# --- library ---
+track-not-found: "%prefix%&cTrack not found: &f{track}"
+library-empty: "%prefix%&7No tracks found in musicdata/."
+library-count: "%prefix%&a{count} track(s) found:"
+library-entry: "&7  - &f{track}"
+
+# --- playback ---
+playing-to-player: "%prefix%&aPlaying &f{track}&a to &f{player}&a."
+playing-to-all: "%prefix%&aPlaying &f{track}&a to everyone."
+stopped-player: "%prefix%&aStopped playback for &f{player}&a."
+stopped-all: "%prefix%&aStopped all playback."
+
+# --- queues ---
+queue-added-player: "%prefix%&aQueued &f{track}&a for &f{player}&a."
+queue-added-all: "%prefix%&aQueued &f{track}&a for everyone."
+queue-cleared-player: "%prefix%&aCleared queue of &f{player}&a."
+queue-cleared-all: "%prefix%&aCleared global queue."
+queue-empty: "%prefix%&7Queue ({target}) is empty."
+queue-header: "%prefix%&aQueue ({target}):"
+queue-entry: "&7  {index}. &f{track}"
+queue-skipped-player: "%prefix%&aSkipped the current track for &f{player}&a."
+queue-skipped-all: "%prefix%&aSkipped the current track (global)."
+
+# --- playlists ---
+playlist-exists: "%prefix%&cA playlist with that name already exists."
+playlist-not-found: "%prefix%&cNo such playlist: &f{name}"
+playlist-empty: "%prefix%&cThat playlist has no tracks."
+playlist-created: "%prefix%&aCreated playlist &f{name}&a."
+playlist-deleted: "%prefix%&aDeleted playlist &f{name}&a."
+playlist-added: "%prefix%&aAdded &f{track}&a to playlist &f{name}&a."
+playlist-removed: "%prefix%&aRemoved &f{track}&a from playlist &f{name}&a."
+playlist-track-missing: "%prefix%&cThat track is not in the playlist."
+playlist-mode-set: "%prefix%&aPlaylist &f{name}&a mode set to &f{mode}&a."
+playlist-list-empty: "%prefix%&7No playlists yet."
+playlist-list-header: "%prefix%&a{count} playlist(s):"
+playlist-list-entry: "&7  - &f{name} &8[{mode}, {size} tracks]"
+playlist-show-header: "%prefix%&aPlaylist &f{name} &8[{mode}]&a:"
+playlist-show-entry: "&7  {index}. &f{track}"
+playlist-playing-player: "%prefix%&aPlaying playlist &f{name}&a to &f{player}&a."
+playlist-playing-all: "%prefix%&aPlaying playlist &f{name}&a to everyone."
+
+# --- zones ---
+zone-exists: "%prefix%&cA zone with that name already exists."
+zone-not-found: "%prefix%&cNo such zone: &f{name}"
+zone-need-interval: "%prefix%&cYou must provide interval-seconds for interval schedule."
+zone-created: "%prefix%&aCreated zone &f{name}&a ({schedule})."
+zone-deleted: "%prefix%&aDeleted zone &f{name}&a."
+zone-list-empty: "%prefix%&7No zones yet."
+zone-list-header: "%prefix%&a{count} zone(s):"
+zone-list-entry: "&7  - &f{name} &8@ {world} ({x}, {y}, {z})&7 r=&f{radius}&7 vol=&f{volume}&7 {type}:&f{source} &8[{schedule}]"
+zone-mode-only-playlist: "%prefix%&cPlay mode only applies to playlist zones."
+zone-mode-set: "%prefix%&aZone &f{name}&a mode set to &f{mode}&a."
+zone-volume-set: "%prefix%&aZone &f{name}&a volume set to &f{volume}&a."
+zone-volume-invalid: "%prefix%&cVolume must be between 0.0 and 1.0."
+
+# --- downloads ---
+downloading: "%prefix%&7Downloading..."
+download-saved: "%prefix%&aSaved as &f{file}&a."
+download-failed: "%prefix%&c{error}"
+download-usage: "%prefix%&cUsage: /pm download <url> <filename>"
+
+# --- language ---
+language-loaded: "%prefix%&aLanguage loaded: &f{language}"
+language-missing: "%prefix%&cLanguage file &f{language}&c not found, falling back to &fen&c."

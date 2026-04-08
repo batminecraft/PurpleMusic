@@ -11,6 +11,12 @@ filename-maximum-length: 100
 # The master volume of music from 0-1 (e.g. 0.5 = 50%).
 music-volume: 1.0
 
+# Language to use for chat messages.
+# PurpleMusic ships with "en" and "fr" and copies them into plugins/PurpleMusic/lang/
+# on first startup. You can drop additional <code>.yml files into that folder and
+# reference them here by their filename without the extension (e.g. "de" for de.yml).
+language: en
+
 # Subdirectory depth allowed in the musicdata folder.
 #   none         - all files must be in the root of musicdata (default)
 #   single       - one level of subdirectory allowed
@@ -20,8 +26,21 @@ subdirectory-depth: unrestricted
 # Default audio range (in blocks) used when creating a music zone if not specified.
 default-zone-radius: 24
 
+# Sound effects played around playback events.
+# Each event maps to a filename inside plugins/PurpleMusic/sfx/.
+# Drop your own short wav/mp3/flac files in that folder, then list them here.
+# Set "enabled: false" to fully disable sound effects.
+sfx:
+  enabled: true
+  volume: 1.0
+  play: "play.wav"
+  pause: "pause.wav"
+  resume: "resume.wav"
+  stop: "stop.wav"
+  skip: "skip.wav"
+
 # Verbose logging for debugging.
 debug-mode: false
 
 # Do not modify - used for automatic config migration.
-config-version: 1
+config-version: 2
